@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Reciprocating Pump Performance Calculator
  * Mathematical, DOM Controller & Chart Engine (calculator.js)
  * Implements SI physics formulas, step-by-step breakdown, HTML5 Canvas curves, and DOM reactivity.
@@ -22,7 +22,7 @@
     g: 9.81         // Acceleration due to gravity (m/s²)
   };
 
-  // 2. Reference Sample Experimental Readings (Available on request via Load Sample Values)
+  // 2. Reference Sample Experimental Readings
   var SAMPLE_READINGS = [
     { rpm: 149, pd: 2.5, ps: 250, r: 0.06,  t: 20, tp: 21 }, // Reading 1
     { rpm: 146, pd: 4.0, ps: 290, r: 0.08,  t: 20, tp: 16 }, // Reading 2
@@ -45,19 +45,22 @@
   /**
    * Pure Math Calculation Engine
    * Calculates all intermediate values and efficiencies for a single reading set.
+   * Uses explicit parseFloat to avoid string concatenation bugs.
    */
   function calculateReadingData(input) {
-    var rpm = input.rpm;
-    var pd = input.pd;
-    var ps = input.ps;
-    var r = input.r;
-    var t = input.t;
-    var tp = input.tp;
+    var rpm = parseFloat(input.rpm);
+    var pd  = parseFloat(input.pd);
+    var ps  = parseFloat(input.ps);
+    var r   = parseFloat(input.r);
+    var t   = parseFloat(input.t);
+    var tp  = parseFloat(input.tp);
 
     // Safety checks against division by zero or non-positive run parameters
-    if (tp <= 0 || t <= 0 || rpm <= 0 || r <= 0) {
+    if (isNaN(tp) || tp <= 0 || isNaN(t) || t <= 0 || isNaN(rpm) || rpm <= 0 || isNaN(r) || r <= 0) {
       return null;
     }
+    if (isNaN(pd) || pd < 0) pd = 0;
+    if (isNaN(ps) || ps < 0) ps = 0;
 
     // A. Input Power (Ei) in kW
     // Ei = (P / tp) * (3600 / EMC)
@@ -204,7 +207,8 @@
   var state = {
     results: [null, null, null],
     activeDetailTab: 0,
-    activeChartTab: 'head_eff' // 'head_q', 'head_eff', 'head_power'
+    activeChartTab: 'head_eff', // 'head_q', 'head_eff', 'head_power'
+    chartAxisMode: 'head_x'     // 'head_x' (Head on X, Load), 'head_y' (Head on Y)
   };
 
   /**
@@ -274,8 +278,8 @@
    */
   function runCalculation() {
     var rawReadings = getInputsFromDOM();
-    var allErrors = [];
     var calculatedResults = [];
+    var allErrors = [];
 
     var alertContainer = document.getElementById('calculator-alert-container');
     if (alertContainer) {
@@ -284,10 +288,22 @@
     }
 
     rawReadings.forEach(function (raw, idx) {
-      var isZeroState = window.PumpValidator ? window.PumpValidator.isInitialState(raw) : false;
+      var rpm = parseFloat(raw.rpm);
+      var pd  = parseFloat(raw.pd);
+      var ps  = parseFloat(raw.ps);
+      var r   = parseFloat(raw.r);
+      var t   = parseFloat(raw.t);
+      var tp  = parseFloat(raw.tp);
+
+      // Check if this reading is all zero or empty
+      var isZeroState = (isNaN(rpm) || rpm === 0) &&
+                        (isNaN(pd)  || pd === 0) &&
+                        (isNaN(ps)  || ps === 0) &&
+                        (isNaN(r)   || r === 0) &&
+                        (isNaN(t)   || t === 0) &&
+                        (isNaN(tp)  || tp === 0);
 
       if (isZeroState) {
-        // Initial state: clear invalid highlights and set clean neutral state
         if (raw.elements) {
           Object.keys(raw.elements).forEach(function (k) {
             if (raw.elements[k]) raw.elements[k].classList.remove('is-invalid');
@@ -297,35 +313,45 @@
         return;
       }
 
-      var validation = window.PumpValidator ? window.PumpValidator.validateReading(raw, idx + 1) : { isValid: true, values: raw, errors: [] };
+      // Check if required parameters are valid positive numbers
+      var hasValidInputs = (!isNaN(rpm) && rpm > 0) &&
+                           (!isNaN(r) && r > 0) &&
+                           (!isNaN(t) && t > 0) &&
+                           (!isNaN(tp) && tp > 0) &&
+                           (!isNaN(pd) && pd >= 0) &&
+                           (!isNaN(ps) && ps >= 0);
 
-      // Update input styling for actively entered readings
-      if (window.PumpValidator && raw.elements) {
-        window.PumpValidator.setInputState(raw.elements.rpm, !isNaN(parseFloat(raw.rpm)) && parseFloat(raw.rpm) > 0);
-        window.PumpValidator.setInputState(raw.elements.pd,  !isNaN(parseFloat(raw.pd))  && parseFloat(raw.pd) >= 0);
-        window.PumpValidator.setInputState(raw.elements.ps,  !isNaN(parseFloat(raw.ps))  && parseFloat(raw.ps) >= 0);
-        window.PumpValidator.setInputState(raw.elements.r,   !isNaN(parseFloat(raw.r))   && parseFloat(raw.r) > 0);
-        window.PumpValidator.setInputState(raw.elements.t,   !isNaN(parseFloat(raw.t))   && parseFloat(raw.t) > 0);
-        window.PumpValidator.setInputState(raw.elements.tp,  !isNaN(parseFloat(raw.tp))  && parseFloat(raw.tp) > 0);
-      }
+      if (hasValidInputs) {
+        if (raw.elements) {
+          Object.keys(raw.elements).forEach(function (k) {
+            if (raw.elements[k]) raw.elements[k].classList.remove('is-invalid');
+          });
+        }
 
-      if (validation.isValid) {
-        var res = calculateReadingData(validation.values);
+        var res = calculateReadingData({
+          rpm: rpm,
+          pd: pd,
+          ps: ps,
+          r: r,
+          t: t,
+          tp: tp
+        });
         calculatedResults.push(res);
       } else {
         calculatedResults.push(null);
-        allErrors = allErrors.concat(validation.errors);
+        // Only mark fields that have negative or non-numeric values
+        if (raw.elements) {
+          if (raw.elements.rpm) raw.elements.rpm.classList.toggle('is-invalid', isNaN(rpm) || rpm < 0);
+          if (raw.elements.pd)  raw.elements.pd.classList.toggle('is-invalid', isNaN(pd) || pd < 0);
+          if (raw.elements.ps)  raw.elements.ps.classList.toggle('is-invalid', isNaN(ps) || ps < 0);
+          if (raw.elements.r)   raw.elements.r.classList.toggle('is-invalid', isNaN(r) || r < 0);
+          if (raw.elements.t)   raw.elements.t.classList.toggle('is-invalid', isNaN(t) || t < 0);
+          if (raw.elements.tp)  raw.elements.tp.classList.toggle('is-invalid', isNaN(tp) || tp < 0);
+        }
       }
     });
 
     state.results = calculatedResults;
-
-    // Display alerts only if active errors exist
-    if (allErrors.length > 0 && alertContainer) {
-      var errorList = allErrors.map(function (e) { return '<li>' + e + '</li>'; }).join('');
-      alertContainer.innerHTML = '<div class="alert alert-warning"><strong>Input Notice:</strong> Please check the following highlighted values:<ul style="margin-top:6px; padding-left:20px;">' + errorList + '</ul></div>';
-      alertContainer.style.display = 'block';
-    }
 
     // Update DOM Views
     updateEfficiencyCards(calculatedResults);
@@ -459,6 +485,125 @@
     renderCalculationDetails(state.results, index);
   }
 
+  // Plotted points cache for canvas hit-testing
+  var cachedPlotPoints = [];
+  var hoveredPointInfo = null;
+
+  /**
+   * Helper: compute nice round scale for chart axes
+   */
+  function computeNiceScale(minVal, maxVal, targetTicks) {
+    if (minVal >= maxVal) maxVal = minVal + 1;
+    var span = maxVal - minVal;
+    var rawStep = span / (targetTicks || 5);
+    var mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    var norm = rawStep / mag;
+    var step;
+    if (norm < 1.5) step = 1 * mag;
+    else if (norm < 3) step = 2 * mag;
+    else if (norm < 7) step = 5 * mag;
+    else step = 10 * mag;
+
+    var niceMin = Math.floor(minVal / step) * step;
+    var niceMax = Math.ceil(maxVal / step) * step;
+    if (niceMin < 0 && minVal >= 0) niceMin = 0;
+    var ticks = [];
+    for (var val = niceMin; val <= niceMax + (step * 0.0001); val += step) {
+      ticks.push(Number(val.toFixed(4)));
+    }
+    return {
+      min: niceMin,
+      max: niceMax,
+      step: step,
+      ticks: ticks
+    };
+  }
+
+  /**
+   * Helper: draw smooth Catmull-Rom spline through points
+   */
+  function drawSplineCurve(ctx, pts) {
+    if (pts.length < 2) return;
+    if (pts.length === 2) {
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      ctx.lineTo(pts[1].x, pts[1].y);
+      ctx.stroke();
+      return;
+    }
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = i > 0 ? pts[i - 1] : pts[0];
+      var p1 = pts[i];
+      var p2 = pts[i + 1];
+      var p3 = (i < pts.length - 2) ? pts[i + 2] : p2;
+
+      var cp1x = p1.x + (p2.x - p0.x) / 6;
+      var cp1y = p1.y + (p2.y - p0.y) / 6;
+      var cp2x = p2.x - (p3.x - p1.x) / 6;
+      var cp2y = p2.y - (p3.y - p1.y) / 6;
+
+      ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    }
+    ctx.stroke();
+  }
+
+  /**
+   * Render Mini Data Coordinate Chips below Chart
+   */
+  function updateChartDataChips(points) {
+    var container = document.getElementById('chart-data-chips');
+    if (!container) return;
+
+    if (!points || points.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    var html = '';
+    points.forEach(function (p) {
+      html += '<div class="chart-data-chip">' +
+                '<div class="chart-data-chip-title">' +
+                  '<span>Reading ' + p.reading + '</span>' +
+                  '<span style="font-size:11.5px; font-weight:600; color:var(--terracotta);">H = ' + formatNum(p.H, 2) + ' m</span>' +
+                '</div>' +
+                '<div class="chart-data-chip-body">';
+
+      if (state.activeChartTab === 'head_eff') {
+        html += '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Volumetric Eff. (ηvol):</span><span class="chart-data-metric-val">' + formatNum(p.volumetric, 2) + ' %</span></div>' +
+                '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Pump Eff. (ηpump):</span><span class="chart-data-metric-val">' + formatNum(p.pump, 2) + ' %</span></div>' +
+                '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Overall Eff. (ηoverall):</span><span class="chart-data-metric-val">' + formatNum(p.overall, 2) + ' %</span></div>';
+      } else if (state.activeChartTab === 'head_q') {
+        html += '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Actual Flow (Qact):</span><span class="chart-data-metric-val">' + formatNum(p.Qact, 3) + ' L/s</span></div>' +
+                '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Swept Flow (Qtheo):</span><span class="chart-data-metric-val">' + formatNum(p.Qtheo, 3) + ' L/s</span></div>';
+      } else {
+        html += '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Input Power (Ei):</span><span class="chart-data-metric-val">' + formatNum(p.Ei, 4) + ' kW</span></div>' +
+                '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Shaft Power (Es):</span><span class="chart-data-metric-val">' + formatNum(p.Es, 4) + ' kW</span></div>' +
+                '<div class="chart-data-metric-row"><span class="chart-data-metric-label">Output Power (Eo):</span><span class="chart-data-metric-val">' + formatNum(p.Eo, 4) + ' kW</span></div>';
+      }
+
+      html +=   '</div>' +
+              '</div>';
+    });
+
+    container.innerHTML = html;
+  }
+
+  /**
+   * Export Performance Chart as High-Resolution PNG
+   */
+  function exportChartImage() {
+    var canvas = document.getElementById('pumpChart');
+    if (!canvas) return;
+    var a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'Reciprocating_Pump_' + state.activeChartTab + '_Curve.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   /**
    * Native HTML5 Canvas Performance Curve Plotter
    */
@@ -469,30 +614,33 @@
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Reset transform before re-measuring / scaling
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
     // Handle high DPI
     var width = canvas.parentElement.clientWidth || 800;
-    var height = 380;
+    var height = 400;
     var dpr = window.devicePixelRatio || 1;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
 
     ctx.scale(dpr, dpr);
 
-    // Clear canvas
-    ctx.fillStyle = '#ffffff';
+    // Clear canvas with crisp white background
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, width, height);
 
-    // Extract valid data points sorted by Total Head (H)
+    // Extract valid data points
     var points = [];
     state.results.forEach(function (r, idx) {
       if (r && !isNaN(r.H) && isFinite(r.H) && r.H > 0) {
         points.push({
           reading: idx + 1,
           H: r.H,
-          Qact: r.Qact * 1000, // convert to L/s for readable plotting
+          Qact: r.Qact * 1000, // L/s
           Qtheo: r.Qtheo * 1000,
           Ei: r.Ei,
           Es: r.Es,
@@ -504,93 +652,131 @@
       }
     });
 
-    if (points.length < 2) {
+    // Update coordinate summary chips
+    updateChartDataChips(points);
+
+    if (points.length === 0) {
+      cachedPlotPoints = [];
       ctx.fillStyle = '#7895A8';
       ctx.font = '14px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('Enter readings in the table above to dynamically generate performance curves.', width / 2, height / 2);
+      ctx.fillText('Enter readings in the table above or click "Load Sample Values" to generate curves.', width / 2, height / 2 - 8);
+      ctx.font = '12px sans-serif';
+      ctx.fillText('All 3 curves (Efficiencies, Discharge, and Power) will update automatically.', width / 2, height / 2 + 16);
       return;
     }
 
+    // Sort by Total Head H
     points.sort(function (a, b) { return a.H - b.H; });
 
     // Chart margins
-    var padLeft = 60;
-    var padRight = 40;
-    var padTop = 45;
+    var padLeft = 70;
+    var padRight = 50;
+    var padTop = 50;
     var padBottom = 55;
     var plotW = width - padLeft - padRight;
     var plotH = height - padTop - padBottom;
 
-    // Determine scale bounds
-    var minX = 0;
-    var maxX = Math.max.apply(null, points.map(function (p) { return p.H; })) * 1.15;
-    if (maxX <= 0) maxX = 80;
-
-    var minY = 0;
-    var maxY = 100;
-    var yAxisTitle = '';
+    // Series definition and metric scale bounds
     var series = [];
+    var metricAxisTitle = '';
+    var metricUnit = '';
+    var maxMetricVal = 100;
 
     if (state.activeChartTab === 'head_eff') {
-      maxY = 100;
-      yAxisTitle = 'Efficiency (%)';
+      metricAxisTitle = 'Efficiency (%)';
+      metricUnit = '%';
       series = [
-        { name: 'Volumetric Efficiency (ηvol)', color: '#263B50', key: 'volumetric' },
-        { name: 'Pump Efficiency (ηpump)', color: '#426783', key: 'pump' },
-        { name: 'Overall Efficiency (ηoverall)', color: '#CD7957', key: 'overall' }
+        { name: 'Volumetric Efficiency (ηvol)', color: '#263B50', key: 'volumetric', badgeOffset: -12 },
+        { name: 'Pump Efficiency (ηpump)',       color: '#426783', key: 'pump',       badgeOffset: -12 },
+        { name: 'Overall Efficiency (ηoverall)', color: '#CD7957', key: 'overall',    badgeOffset: 16 }
       ];
+      var maxEff = Math.max.apply(null, points.map(function (p) {
+        return Math.max(p.volumetric, p.pump, p.overall);
+      }));
+      maxMetricVal = isFinite(maxEff) ? maxEff : 100;
+      if (maxMetricVal > 95) {
+        maxMetricVal = Math.ceil((maxMetricVal * 1.1) / 10) * 10;
+      } else {
+        maxMetricVal = 100;
+      }
     } else if (state.activeChartTab === 'head_q') {
-      var maxQ = Math.max.apply(null, points.map(function (p) { return Math.max(p.Qact, p.Qtheo); })) * 1.25;
-      maxY = maxQ > 0 ? maxQ : 1.0;
-      yAxisTitle = 'Discharge (L/s)';
+      metricAxisTitle = 'Discharge (L/s)';
+      metricUnit = 'L/s';
       series = [
-        { name: 'Actual Discharge (Qact)', color: '#CD7957', key: 'Qact' },
-        { name: 'Theoretical Discharge (Qtheo)', color: '#426783', key: 'Qtheo', dashed: true }
+        { name: 'Actual Discharge (Qact)',           color: '#CD7957', key: 'Qact',  badgeOffset: -12 },
+        { name: 'Theoretical Discharge (Qtheo)',     color: '#426783', key: 'Qtheo', badgeOffset: 16, dashed: true }
       ];
+      var maxQ = Math.max.apply(null, points.map(function (p) {
+        return Math.max(p.Qact, p.Qtheo);
+      })) * 1.25;
+      maxMetricVal = maxQ > 0 ? maxQ : 1.0;
     } else {
-      var maxP = Math.max.apply(null, points.map(function (p) { return Math.max(p.Ei, p.Es, p.Eo); })) * 1.25;
-      maxY = maxP > 0 ? maxP : 1.0;
-      yAxisTitle = 'Power (kW)';
+      metricAxisTitle = 'Power (kW)';
+      metricUnit = 'kW';
       series = [
-        { name: 'Input Electrical Power (Ei)', color: '#263B50', key: 'Ei' },
-        { name: 'Shaft Brake Power (Es)', color: '#426783', key: 'Es' },
-        { name: 'Pump Output Power (Eo)', color: '#CD7957', key: 'Eo' }
+        { name: 'Input Electrical Power (Ei)',       color: '#263B50', key: 'Ei', badgeOffset: -12 },
+        { name: 'Shaft Brake Power (Es)',            color: '#426783', key: 'Es', badgeOffset: -12 },
+        { name: 'Pump Output Power (Eo)',            color: '#CD7957', key: 'Eo', badgeOffset: 16 }
       ];
+      var maxP = Math.max.apply(null, points.map(function (p) {
+        return Math.max(p.Ei, p.Es, p.Eo);
+      })) * 1.25;
+      maxMetricVal = maxP > 0 ? maxP : 1.0;
     }
 
-    // Gridlines and Y-ticks
-    ctx.strokeStyle = '#D9E0E5';
+    // Compute Nice Scales
+    var maxHeadVal = Math.max.apply(null, points.map(function (p) { return p.H; })) * 1.18;
+    var scaleHead = computeNiceScale(0, maxHeadVal > 0 ? maxHeadVal : 80, 5);
+    var scaleMetric = computeNiceScale(0, maxMetricVal, 5);
+
+    var scaleX, scaleY, xAxisTitle, yAxisTitle;
+    var isHeadOnX = (state.chartAxisMode === 'head_x');
+
+    if (isHeadOnX) {
+      scaleX = scaleHead;
+      scaleY = scaleMetric;
+      xAxisTitle = 'Total Dynamic Operating Head H (metres of water)';
+      yAxisTitle = metricAxisTitle;
+    } else {
+      scaleX = scaleMetric;
+      scaleY = scaleHead;
+      xAxisTitle = metricAxisTitle;
+      yAxisTitle = 'Total Dynamic Operating Head H (metres of water)';
+    }
+
+    // Draw Subtle Horizontal Gridlines & Y-Ticks
+    ctx.strokeStyle = '#E5EBF0';
     ctx.lineWidth = 1;
     ctx.fillStyle = '#64748B';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
 
-    var yTicks = 5;
-    for (var i = 0; i <= yTicks; i++) {
-      var val = (maxY / yTicks) * i;
-      var y = padTop + plotH - (val / maxY) * plotH;
+    scaleY.ticks.forEach(function (val) {
+      var y = padTop + plotH - ((val - scaleY.min) / (scaleY.max - scaleY.min)) * plotH;
       ctx.beginPath();
       ctx.moveTo(padLeft, y);
       ctx.lineTo(padLeft + plotW, y);
       ctx.stroke();
-      ctx.fillText(formatNum(val, maxY < 5 ? 2 : 0), padLeft - 8, y + 4);
-    }
 
-    // Gridlines and X-ticks
-    var xTicks = 5;
+      var formatted = scaleY.step < 1 ? formatNum(val, scaleY.step < 0.1 ? 3 : 2) : formatNum(val, 0);
+      ctx.fillText(formatted, padLeft - 10, y + 4);
+    });
+
+    // Draw Subtle Vertical Gridlines & X-Ticks
     ctx.textAlign = 'center';
-    for (var j = 0; j <= xTicks; j++) {
-      var xVal = (maxX / xTicks) * j;
-      var x = padLeft + (xVal / maxX) * plotW;
+    scaleX.ticks.forEach(function (val) {
+      var x = padLeft + ((val - scaleX.min) / (scaleX.max - scaleX.min)) * plotW;
       ctx.beginPath();
       ctx.moveTo(x, padTop);
       ctx.lineTo(x, padTop + plotH);
       ctx.stroke();
-      ctx.fillText(formatNum(xVal, 0), x, padTop + plotH + 18);
-    }
 
-    // Axes
+      var formatted = scaleX.step < 1 ? formatNum(val, scaleX.step < 0.1 ? 3 : 2) : formatNum(val, 0);
+      ctx.fillText(formatted, x, padTop + plotH + 18);
+    });
+
+    // Draw Main Axis Lines
     ctx.strokeStyle = '#263B50';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -599,11 +785,11 @@
     ctx.lineTo(padLeft + plotW, padTop + plotH);
     ctx.stroke();
 
-    // Axis Labels
+    // Axis Titles
     ctx.fillStyle = '#263B50';
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Total Operating Head H (metres of water)', padLeft + plotW / 2, height - 12);
+    ctx.fillText(xAxisTitle, padLeft + plotW / 2, height - 12);
 
     ctx.save();
     ctx.translate(16, padTop + plotH / 2);
@@ -611,71 +797,128 @@
     ctx.fillText(yAxisTitle, 0, 0);
     ctx.restore();
 
-    // Plot Series Curves
-    series.forEach(function (s) {
-      ctx.strokeStyle = s.color;
-      ctx.fillStyle = s.color;
-      ctx.lineWidth = 2.5;
+    // Plot Curves and Marker Points
+    var plottedPointsList = [];
 
-      if (s.dashed) {
-        ctx.setLineDash([5, 4]);
-      } else {
+    series.forEach(function (s) {
+      var pts = [];
+
+      points.forEach(function (p) {
+        var xVal = isHeadOnX ? p.H : p[s.key];
+        var yVal = isHeadOnX ? p[s.key] : p.H;
+
+        var px = padLeft + ((xVal - scaleX.min) / (scaleX.max - scaleX.min)) * plotW;
+        var py = padTop + plotH - ((yVal - scaleY.min) / (scaleY.max - scaleY.min)) * plotH;
+
+        pts.push({
+          x: px,
+          y: py,
+          p: p,
+          val: p[s.key],
+          series: s
+        });
+
+        plottedPointsList.push({
+          x: px,
+          y: py,
+          p: p,
+          val: p[s.key],
+          series: s
+        });
+      });
+
+      // Draw Smooth Curve
+      if (pts.length > 1) {
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2.5;
+        if (s.dashed) {
+          ctx.setLineDash([6, 4]);
+        } else {
+          ctx.setLineDash([]);
+        }
+
+        drawSplineCurve(ctx, pts);
         ctx.setLineDash([]);
       }
 
-      ctx.beginPath();
-      points.forEach(function (p, idx) {
-        var x = padLeft + (p.H / maxX) * plotW;
-        var yVal = p[s.key];
-        var y = padTop + plotH - (yVal / maxY) * plotH;
-
-        if (idx === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      });
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Draw Marker Dots
-      points.forEach(function (p) {
-        var x = padLeft + (p.H / maxX) * plotW;
-        var yVal = p[s.key];
-        var y = padTop + plotH - (yVal / maxY) * plotH;
-
+      // Draw Markers and Value Callout Badges
+      pts.forEach(function (pt) {
+        // Marker circle
         ctx.beginPath();
-        ctx.arc(x, y, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
+        ctx.arc(pt.x, pt.y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFFFFF';
         ctx.fill();
         ctx.strokeStyle = s.color;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
+
+        // Value text badge
+        var valStr = formatNum(pt.val, (metricUnit === 'L/s' || metricUnit === 'kW') ? 3 : 1) + ' ' + metricUnit;
+        ctx.font = 'bold 10px sans-serif';
+        var badgeW = ctx.measureText(valStr).width + 8;
+        var badgeH = 15;
+        var badgeX = pt.x - badgeW / 2;
+        var badgeY = pt.y + pt.series.badgeOffset - (pt.series.badgeOffset < 0 ? badgeH : 0);
+
+        // Keep inside canvas bounds
+        badgeX = Math.max(padLeft, Math.min(padLeft + plotW - badgeW, badgeX));
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+        ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+        ctx.strokeStyle = pt.series.color;
+        ctx.lineWidth = 1;
+        ctx.strokeRect(badgeX, badgeY, badgeW, badgeH);
+
+        ctx.fillStyle = pt.series.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(valStr, badgeX + badgeW / 2, badgeY + 11);
       });
     });
 
-    // Draw Legend
+    cachedPlotPoints = plottedPointsList;
+
+    // Highlight hovered point if active
+    if (hoveredPointInfo) {
+      ctx.beginPath();
+      ctx.arc(hoveredPointInfo.x, hoveredPointInfo.y, 8, 0, Math.PI * 2);
+      ctx.strokeStyle = hoveredPointInfo.series.color;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(hoveredPointInfo.x, hoveredPointInfo.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = hoveredPointInfo.series.color;
+      ctx.fill();
+    }
+
+    // Draw Legend at Top
     var legendX = padLeft + 10;
-    var legendY = 22;
-    ctx.font = '11px sans-serif';
+    var legendY = 24;
+    ctx.font = '11.5px sans-serif';
     ctx.textAlign = 'left';
 
     series.forEach(function (s) {
       ctx.strokeStyle = s.color;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.5;
+      if (s.dashed) {
+        ctx.setLineDash([5, 3]);
+      } else {
+        ctx.setLineDash([]);
+      }
       ctx.beginPath();
       ctx.moveTo(legendX, legendY - 4);
-      ctx.lineTo(legendX + 18, legendY - 4);
+      ctx.lineTo(legendX + 20, legendY - 4);
       ctx.stroke();
+      ctx.setLineDash([]);
 
       ctx.beginPath();
-      ctx.arc(legendX + 9, legendY - 4, 3.5, 0, Math.PI * 2);
+      ctx.arc(legendX + 10, legendY - 4, 3.5, 0, Math.PI * 2);
       ctx.fillStyle = s.color;
       ctx.fill();
 
       ctx.fillStyle = '#263B50';
-      ctx.fillText(s.name, legendX + 24, legendY);
-      legendX += ctx.measureText(s.name).width + 38;
+      ctx.fillText(s.name, legendX + 26, legendY);
+      legendX += ctx.measureText(s.name).width + 42;
     });
   }
 
@@ -814,16 +1057,16 @@
    * Initialize Calculator Event Listeners
    */
   function initCalculator() {
-    // Populate with 0 initially as requested
-    populateInputs(ZERO_READINGS);
+    // Populate with verified laboratory sample values by default so the calculator works immediately!
+    populateInputs(SAMPLE_READINGS);
 
-    // Initial neutral evaluation
+    // Initial evaluation
     runCalculation();
 
     // Attach live input listeners to all input fields
     var inputs = document.querySelectorAll('.form-control-input, .data-entry-table input, .input-table input');
     inputs.forEach(function (input) {
-      // Auto-select 0 on click/focus so user can type immediately
+      // Auto-select on click/focus so user can type immediately
       input.addEventListener('focus', function () {
         if (this.value === '0') {
           this.select();
@@ -841,6 +1084,17 @@
     var calcBtn = document.getElementById('btn-calculate');
     if (calcBtn) {
       calcBtn.addEventListener('click', function () {
+        var rawReadings = getInputsFromDOM();
+        var allZero = rawReadings.every(function (raw) {
+          return (!raw.rpm || parseFloat(raw.rpm) === 0) &&
+                 (!raw.r || parseFloat(raw.r) === 0) &&
+                 (!raw.t || parseFloat(raw.t) === 0) &&
+                 (!raw.tp || parseFloat(raw.tp) === 0);
+        });
+
+        if (allZero) {
+          populateInputs(SAMPLE_READINGS);
+        }
         runCalculation();
         var resultsCard = document.getElementById('results-dashboard');
         if (resultsCard) {
@@ -910,6 +1164,90 @@
       });
     });
 
+    // Swap Axes Button
+    var swapAxesBtn = document.getElementById('btn-swap-axes');
+    var swapAxesText = document.getElementById('swap-axes-text');
+    if (swapAxesBtn) {
+      swapAxesBtn.addEventListener('click', function () {
+        state.chartAxisMode = (state.chartAxisMode === 'head_x') ? 'head_y' : 'head_x';
+        if (swapAxesText) {
+          swapAxesText.textContent = (state.chartAxisMode === 'head_x')
+            ? 'Axis: Head on X (Load)'
+            : 'Axis: Head on Y (Standard H vs η)';
+        }
+        renderPerformanceChart();
+      });
+    }
+
+    // Export Chart PNG Button
+    var exportChartBtn = document.getElementById('btn-export-chart');
+    if (exportChartBtn) {
+      exportChartBtn.addEventListener('click', function () {
+        exportChartImage();
+      });
+    }
+
+    // Canvas Interactive Hover Tooltip
+    var chartCanvas = document.getElementById('pumpChart');
+    var chartTooltip = document.getElementById('chart-tooltip');
+    if (chartCanvas && chartTooltip) {
+      chartCanvas.addEventListener('mousemove', function (e) {
+        if (!cachedPlotPoints || cachedPlotPoints.length === 0) return;
+        var rect = chartCanvas.getBoundingClientRect();
+        var mx = e.clientX - rect.left;
+        var my = e.clientY - rect.top;
+
+        var nearest = null;
+        var minDist = 26;
+
+        cachedPlotPoints.forEach(function (pt) {
+          var dist = Math.hypot(pt.x - mx, pt.y - my);
+          if (dist < minDist) {
+            minDist = dist;
+            nearest = pt;
+          }
+        });
+
+        if (nearest) {
+          hoveredPointInfo = nearest;
+          var p = nearest.p;
+          var content = '<div style="font-weight:700; color:#E8BDA6; margin-bottom:4px;">Reading ' + p.reading + ' (H = ' + formatNum(p.H, 2) + ' m)</div>';
+          if (state.activeChartTab === 'head_eff') {
+            content += '<div>Volumetric (ηvol): <strong>' + formatNum(p.volumetric, 2) + ' %</strong></div>' +
+                       '<div>Pump (ηpump): <strong>' + formatNum(p.pump, 2) + ' %</strong></div>' +
+                       '<div>Overall (ηoverall): <strong>' + formatNum(p.overall, 2) + ' %</strong></div>';
+          } else if (state.activeChartTab === 'head_q') {
+            content += '<div>Actual Flow: <strong>' + formatNum(p.Qact, 3) + ' L/s</strong></div>' +
+                       '<div>Swept Theor Flow: <strong>' + formatNum(p.Qtheo, 3) + ' L/s</strong></div>';
+          } else {
+            content += '<div>Input Ei: <strong>' + formatNum(p.Ei, 4) + ' kW</strong></div>' +
+                       '<div>Shaft Es: <strong>' + formatNum(p.Es, 4) + ' kW</strong></div>' +
+                       '<div>Output Eo: <strong>' + formatNum(p.Eo, 4) + ' kW</strong></div>';
+          }
+
+          chartTooltip.innerHTML = content;
+          chartTooltip.style.display = 'block';
+          chartTooltip.style.left = Math.min(rect.width - 210, Math.max(10, mx + 14)) + 'px';
+          chartTooltip.style.top = Math.max(10, my - 24) + 'px';
+          renderPerformanceChart();
+        } else {
+          if (hoveredPointInfo) {
+            hoveredPointInfo = null;
+            chartTooltip.style.display = 'none';
+            renderPerformanceChart();
+          }
+        }
+      });
+
+      chartCanvas.addEventListener('mouseleave', function () {
+        if (hoveredPointInfo) {
+          hoveredPointInfo = null;
+          chartTooltip.style.display = 'none';
+          renderPerformanceChart();
+        }
+      });
+    }
+
     // Window resize redrawing for responsive chart canvas
     window.addEventListener('resize', function () {
       renderPerformanceChart();
@@ -926,6 +1264,7 @@
     populateInputs: populateInputs,
     downloadReport: downloadReport,
     downloadCSV: downloadCSV,
+    exportChartImage: exportChartImage,
     renderPerformanceChart: renderPerformanceChart
   };
 
@@ -943,4 +1282,3 @@
   }
 
 })(window);
-

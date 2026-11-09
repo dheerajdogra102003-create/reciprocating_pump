@@ -439,18 +439,33 @@
     <section class="content-section no-print">
       <div class="section-header">
         <h2 class="section-title">4. Performance Characteristic Curves</h2>
-        <p class="section-subtitle">Graphical representation of experimental parameters plotted against Total Head ($H$).</p>
+        <p class="section-subtitle">Dynamic graphical representation of experimental reciprocating pump parameters plotted against Total Dynamic Head H (metres of water).</p>
       </div>
 
       <div class="chart-wrapper">
-        <div class="chart-tabs">
-          <button type="button" class="chart-tab-btn active" data-chart="head_eff">Head vs. Efficiencies (ηoverall, ηvol, ηpump)</button>
-          <button type="button" class="chart-tab-btn" data-chart="head_q">Head vs. Discharge (Qact, Qtheo)</button>
-          <button type="button" class="chart-tab-btn" data-chart="head_power">Head vs. Power (Ei, Es, Eo)</button>
+        <div class="chart-header-row">
+          <div class="chart-tabs">
+            <button type="button" class="chart-tab-btn active" data-chart="head_eff">Head vs. Efficiencies (ηoverall, ηvol, ηpump)</button>
+            <button type="button" class="chart-tab-btn" data-chart="head_q">Head vs. Discharge (Qact, Qtheo)</button>
+            <button type="button" class="chart-tab-btn" data-chart="head_power">Head vs. Power (Ei, Es, Eo)</button>
+          </div>
+          <div class="chart-controls-cluster">
+            <button type="button" id="btn-swap-axes" class="chart-control-btn" title="Toggle between Head on X-axis (Load) and Head on Y-axis (Standard H vs η)">
+              <span>⇄</span> <span id="swap-axes-text">Axis: Head on X (Load)</span>
+            </button>
+            <button type="button" id="btn-export-chart" class="chart-control-btn" title="Download performance curve chart as PNG image">
+              <span>📥</span> <span>Download PNG</span>
+            </button>
+          </div>
         </div>
+
         <div class="chart-canvas-area">
           <canvas id="pumpChart"></canvas>
+          <div id="chart-tooltip" class="chart-tooltip"></div>
         </div>
+
+        <!-- Coordinates Summary Strip -->
+        <div id="chart-data-chips" class="chart-data-strip"></div>
       </div>
     </section>
 

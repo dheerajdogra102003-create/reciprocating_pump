@@ -357,14 +357,24 @@
   background-color: var(--bg-white);
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 22px;
 }
 
-.chart-tabs {
+.chart-header-row {
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 18px;
+}
+
+.chart-header-row .chart-tabs {
+  border-bottom: none;
+  margin-bottom: 0;
+  display: flex;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -394,11 +404,114 @@
   background-color: var(--bg-secondary);
 }
 
+.chart-controls-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.chart-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.chart-control-btn:hover {
+  background-color: var(--muted-peach);
+  color: var(--deep-steel-blue);
+  border-color: var(--terracotta);
+}
+
 .chart-canvas-area {
   position: relative;
   width: 100%;
+  min-height: 400px;
   background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
   overflow-x: auto;
+}
+
+.chart-canvas-area canvas {
+  display: block;
+  width: 100%;
+  cursor: crosshair;
+}
+
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(38, 59, 80, 0.96);
+  color: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  display: none;
+  z-index: 10;
+  white-space: nowrap;
+  border-left: 3px solid var(--terracotta);
+  backdrop-filter: blur(4px);
+}
+
+.chart-data-strip {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.chart-data-chip {
+  padding: 12px 16px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+}
+
+.chart-data-chip-title {
+  font-weight: 700;
+  color: var(--deep-steel-blue);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chart-data-chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-data-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-data-metric-label {
+  font-weight: 500;
+}
+
+.chart-data-metric-val {
+  font-weight: 700;
+  color: var(--deep-steel-blue);
 }
 
 /* Printable Report */

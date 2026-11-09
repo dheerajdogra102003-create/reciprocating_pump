@@ -95,7 +95,6 @@
      * @returns {object} { isValid: boolean, isZeroState: boolean, errors: string[], values: object }
      */
     validateReading: function (reading, readingIndex) {
-      // If reading is in initial zero/empty state, do not trigger error styling
       if (this.isInitialState(reading)) {
         return {
           isValid: false,
@@ -110,7 +109,7 @@
       var prefix = 'Reading ' + readingIndex + ': ';
 
       // 1. Pump RPM (N) - must be > 0
-      var rpmCheck = this.validateField(reading.rpm, prefix + 'Pump RPM (N)', { min: 1, max: 2000, allowZero: false });
+      var rpmCheck = this.validateField(reading.rpm, prefix + 'Pump RPM (N)', { min: 1, max: 5000, allowZero: false });
       if (!rpmCheck.isValid) {
         errors.push(rpmCheck.message);
       } else {
@@ -118,7 +117,7 @@
       }
 
       // 2. Gauge Pressure (Pd) - kg/cm², allow zero or positive
-      var pdCheck = this.validateField(reading.pd, prefix + 'Gauge Pressure (Pd)', { min: 0, max: 50, allowZero: true });
+      var pdCheck = this.validateField(reading.pd, prefix + 'Gauge Pressure (Pd)', { min: 0, max: 100, allowZero: true });
       if (!pdCheck.isValid) {
         errors.push(pdCheck.message);
       } else {
@@ -133,24 +132,24 @@
         cleanValues.ps = psCheck.parsedValue;
       }
 
-      // 4. Water Rise (R) - m, must be > 0 for valid test
-      var rCheck = this.validateField(reading.r, prefix + 'Water Rise (R)', { min: 0.001, max: 5.0, allowZero: false });
+      // 4. Water Rise (R) - m, allows both meter and cm values up to 50
+      var rCheck = this.validateField(reading.r, prefix + 'Water Rise (R)', { min: 0.0001, max: 50, allowZero: false });
       if (!rCheck.isValid) {
         errors.push(rCheck.message);
       } else {
         cleanValues.r = rCheck.parsedValue;
       }
 
-      // 5. Water Rise Time (t) - s, must be > 0 (prevents division by zero)
-      var tCheck = this.validateField(reading.t, prefix + 'Water Rise Time (t)', { min: 0.1, max: 1000, allowZero: false });
+      // 5. Water Rise Time (t) - s, must be > 0
+      var tCheck = this.validateField(reading.t, prefix + 'Water Rise Time (t)', { min: 0.01, max: 3600, allowZero: false });
       if (!tCheck.isValid) {
         errors.push(tCheck.message);
       } else {
         cleanValues.t = tCheck.parsedValue;
       }
 
-      // 6. Energy Meter Time (tp) - s, must be > 0 (prevents division by zero)
-      var tpCheck = this.validateField(reading.tp, prefix + 'Energy Meter Time (tp)', { min: 0.1, max: 1000, allowZero: false });
+      // 6. Energy Meter Time (tp) - s, must be > 0
+      var tpCheck = this.validateField(reading.tp, prefix + 'Energy Meter Time (tp)', { min: 0.01, max: 3600, allowZero: false });
       if (!tpCheck.isValid) {
         errors.push(tpCheck.message);
       } else {
