@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculator | Reciprocating Pump Performance Analyzer</title>
+  <title>Calculator | ReciproCalc – Reciprocating Pump Performance Analyzer</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/calculator.css">
   <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
+  <!-- Navigation Bar (Simple: Home & Calculator Only) -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="../index.html" class="brand-logo" aria-label="Home">
+      <a href="../index.html" class="brand-logo" aria-label="ReciproCalc Home">
         <div class="brand-mark">RP</div>
         <div class="brand-text-block">
           <span class="brand-name">ReciproCalc</span>
-          <span class="brand-sub">Fluid Machinery Laboratory</span>
+          <span class="brand-sub">Reciprocating Pump Performance Analyzer</span>
         </div>
       </a>
 
@@ -34,19 +34,20 @@
     </div>
   </header>
 
-  <!-- Page Header (Flat, no card) -->
-  <div class="container" style="padding-top: 36px; padding-bottom: 12px;">
-    <h1 style="font-size: 32px; font-weight: 800; color: var(--dark-navy); letter-spacing: -0.02em; margin-bottom: 8px;">
+  <!-- Page Title Header (Flat, spacious) -->
+  <div class="container" style="padding-top: 36px; padding-bottom: 8px;">
+    <span class="pill-badge">Performance Calculation Suite</span>
+    <h1 style="font-size: 32px; font-weight: 800; color: var(--deep-steel-blue); letter-spacing: -0.02em; margin-top: 10px; margin-bottom: 8px;">
       Reciprocating Pump Performance Calculator
     </h1>
-    <p style="font-size: 15px; color: var(--text-secondary);">
-      Continuous data reduction engine. Enter laboratory readings below for automatic evaluation of power, discharges, head, and efficiencies.
+    <p style="font-size: 15px; color: var(--text-secondary); max-width: 820px;">
+      Continuous data reduction engine. Enter laboratory measurements below for automated evaluation of power, discharges, operating head, and efficiencies across three experimental test runs.
     </p>
   </div>
 
   <main class="container">
 
-    <!-- Printable Header (Only active on print) -->
+    <!-- Printable Header (Active only when printing laboratory sheet) -->
     <div class="print-only-header">
       <div class="print-title">DEPARTMENT OF MECHANICAL ENGINEERING</div>
       <div class="print-subtitle">Reciprocating Pump Performance Test — Laboratory Calculation Sheet</div>
@@ -54,19 +55,19 @@
         <div><strong>Student Name:</strong> ________________________</div>
         <div><strong>Roll / Reg No:</strong> ________________________</div>
         <div><strong>Date:</strong> ________________________</div>
-        <div><strong>Batch:</strong> ________________________</div>
-        <div><strong>Pump:</strong> Double-Acting Reciprocating</div>
-        <div><strong>Signature:</strong> ________________________</div>
+        <div><strong>Batch / Group:</strong> ________________________</div>
+        <div><strong>Pump Type:</strong> Double-Acting Reciprocating</div>
+        <div><strong>Faculty Signature:</strong> ________________________</div>
       </div>
     </div>
 
-    <!-- Action Bar -->
+    <!-- Action Bar (Prominent actions with 70:30 Steel Blue & Terracotta balance) -->
     <div class="calc-action-bar no-print">
       <div class="action-cluster">
         <button type="button" id="btn-calculate" class="btn btn-primary" title="Trigger calculation evaluation">
           ⚡ Calculate Now
         </button>
-        <button type="button" id="btn-sample" class="btn btn-secondary" title="Load sample experimental readings">
+        <button type="button" id="btn-sample" class="btn btn-secondary" title="Load verified laboratory sample values">
           📋 Load Sample Values
         </button>
         <button type="button" id="btn-reset" class="btn btn-outline" title="Reset all input fields to 0">
@@ -74,13 +75,13 @@
         </button>
       </div>
       <div class="action-cluster">
-        <button type="button" id="btn-print" class="btn btn-outline" title="Print formal lab report">
+        <button type="button" id="btn-print" class="btn btn-outline" title="Print formal lab calculation sheet">
           🖨️ Print Results
         </button>
-        <button type="button" id="btn-download" class="btn btn-outline" title="Download text report">
+        <button type="button" id="btn-download" class="btn btn-outline" title="Download comprehensive text report">
           💾 Download Report (.txt)
         </button>
-        <button type="button" id="btn-download-csv" class="btn btn-secondary" title="Download Excel-compatible CSV results">
+        <button type="button" id="btn-download-csv" class="btn btn-secondary" title="Download Excel-compatible CSV data">
           📊 Download CSV (.csv)
         </button>
       </div>
@@ -89,11 +90,11 @@
     <!-- Live Alert Box -->
     <div id="calculator-alert-container" style="display: none;"></div>
 
-    <!-- Section 1: Apparatus Constants -->
-    <section class="content-section" style="padding-top: 16px;">
-      <div class="section-header" style="margin-bottom: 16px;">
-        <h2 class="section-title" style="font-size: 20px;">1. Apparatus Constants</h2>
-        <p class="section-subtitle">Calibrated physical dimensions and motor specifications predefined for the test rig.</p>
+    <!-- Section 1: Predefined Apparatus and Calibration Values -->
+    <section class="content-section" style="padding-top: 10px;">
+      <div class="section-header">
+        <h2 class="section-title">1. Apparatus Constants & Calibration Values</h2>
+        <p class="section-subtitle">Predefined physical test rig dimensions, motor constants, and fluid properties.</p>
       </div>
 
       <div class="constants-list-grid">
@@ -144,7 +145,7 @@
       </div>
     </section>
 
-    <!-- Section 2: Experimental Observations Form Table -->
+    <!-- Section 2: Experimental Input Fields (Three Experimental Test Runs) -->
     <section class="content-section">
       <div class="section-header">
         <h2 class="section-title">2. Experimental Observation Readings</h2>
@@ -155,117 +156,117 @@
         <table class="data-entry-table">
           <thead>
             <tr>
-              <th style="min-width: 120px;">Run</th>
-              <th style="min-width: 140px;">Pump RPM<br><span class="unit-label">N (RPM)</span></th>
-              <th style="min-width: 150px;">Gauge Pressure<br><span class="unit-label">Pd (kg/cm²)</span></th>
-              <th style="min-width: 150px;">Vacuum Pressure<br><span class="unit-label">Ps (mmHg)</span></th>
+              <th style="min-width: 130px;">Test Run</th>
+              <th style="min-width: 140px;">Pump Speed<br><span class="unit-label">N (RPM)</span></th>
+              <th style="min-width: 155px;">Gauge Pressure<br><span class="unit-label">Pd (kg/cm²)</span></th>
+              <th style="min-width: 155px;">Vacuum Pressure<br><span class="unit-label">Ps (mmHg)</span></th>
               <th style="min-width: 145px;">Water Rise in Tank<br><span class="unit-label">R (m)</span></th>
               <th style="min-width: 145px;">Water Rise Time<br><span class="unit-label">t (s)</span></th>
               <th style="min-width: 145px;">Energy Meter Time<br><span class="unit-label">tp (s)</span></th>
             </tr>
           </thead>
           <tbody>
-            <!-- Reading 1 -->
+            <!-- Test Run 1 -->
             <tr>
               <td><span class="reading-tag">Reading 1</span></td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="rpm_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="rpm_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Pump Speed RPM">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="pd_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="pd_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Gauge Pressure Pd">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="ps_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="ps_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Vacuum Pressure Ps">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="r_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="r_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Water Rise R">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="t_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="t_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Water Rise Time t">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="tp_1" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="tp_1" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 1 Energy Meter Time tp">
                 </div>
               </td>
             </tr>
 
-            <!-- Reading 2 -->
+            <!-- Test Run 2 -->
             <tr>
               <td><span class="reading-tag">Reading 2</span></td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="rpm_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="rpm_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Pump Speed RPM">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="pd_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="pd_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Gauge Pressure Pd">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="ps_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="ps_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Vacuum Pressure Ps">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="r_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="r_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Water Rise R">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="t_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="t_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Water Rise Time t">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="tp_2" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="tp_2" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 2 Energy Meter Time tp">
                 </div>
               </td>
             </tr>
 
-            <!-- Reading 3 -->
+            <!-- Test Run 3 -->
             <tr>
               <td><span class="reading-tag">Reading 3</span></td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="rpm_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="rpm_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Pump Speed RPM">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="pd_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="pd_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Gauge Pressure Pd">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="ps_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="ps_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Vacuum Pressure Ps">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="r_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="r_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Water Rise R">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="t_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="t_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Water Rise Time t">
                 </div>
               </td>
               <td>
                 <div class="form-input-wrap">
-                  <input type="number" id="tp_3" class="form-control-input" value="0" placeholder="0" step="any" min="0">
+                  <input type="number" id="tp_3" class="form-control-input" value="0" placeholder="0" step="any" min="0" aria-label="Reading 3 Energy Meter Time tp">
                 </div>
               </td>
             </tr>
@@ -274,61 +275,70 @@
       </div>
     </section>
 
-    <!-- Section 3: Calculation Results -->
+    <!-- Section 3: Automatic Calculations & Efficiency Calculations -->
     <section id="results-dashboard" class="content-section">
       <div class="section-header">
         <h2 class="section-title">3. Calculated Performance Results</h2>
         <p class="section-subtitle">Summary of intermediate hydro-mechanical variables and evaluated efficiencies.</p>
       </div>
 
-      <!-- Efficiency Overview Horizontal Strip (No cards) -->
+      <!-- Efficiency Overview Horizontal Strip (Flat, clean, no boxed cards) -->
       <div class="efficiency-summary-strip">
         
         <div class="summary-reading-col">
-          <div class="summary-col-title">Reading 1 (Low Head)</div>
+          <div class="summary-col-title">
+            Reading 1
+            <span class="summary-col-badge">Low Head</span>
+          </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Overall Efficiency (ηoverall):</span>
             <span id="card_overall_1" class="efficiency-metric-val primary">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Volumetric Efficiency (ηvol):</span>
-            <span id="card_vol_1" class="efficiency-metric-val success">0.00 %</span>
+            <span id="card_vol_1" class="efficiency-metric-val vol">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Pump Efficiency (ηpump):</span>
-            <span id="card_pump_1" class="efficiency-metric-val">0.00 %</span>
+            <span id="card_pump_1" class="efficiency-metric-val pump">0.00 %</span>
           </div>
         </div>
 
         <div class="summary-reading-col">
-          <div class="summary-col-title">Reading 2 (Medium Head)</div>
+          <div class="summary-col-title">
+            Reading 2
+            <span class="summary-col-badge">Medium Head</span>
+          </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Overall Efficiency (ηoverall):</span>
             <span id="card_overall_2" class="efficiency-metric-val primary">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Volumetric Efficiency (ηvol):</span>
-            <span id="card_vol_2" class="efficiency-metric-val success">0.00 %</span>
+            <span id="card_vol_2" class="efficiency-metric-val vol">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Pump Efficiency (ηpump):</span>
-            <span id="card_pump_2" class="efficiency-metric-val">0.00 %</span>
+            <span id="card_pump_2" class="efficiency-metric-val pump">0.00 %</span>
           </div>
         </div>
 
         <div class="summary-reading-col">
-          <div class="summary-col-title">Reading 3 (High Head)</div>
+          <div class="summary-col-title">
+            Reading 3
+            <span class="summary-col-badge">High Head</span>
+          </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Overall Efficiency (ηoverall):</span>
             <span id="card_overall_3" class="efficiency-metric-val primary">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Volumetric Efficiency (ηvol):</span>
-            <span id="card_vol_3" class="efficiency-metric-val success">0.00 %</span>
+            <span id="card_vol_3" class="efficiency-metric-val vol">0.00 %</span>
           </div>
           <div class="efficiency-metric-row">
             <span class="efficiency-metric-label">Pump Efficiency (ηpump):</span>
-            <span id="card_pump_3" class="efficiency-metric-val">0.00 %</span>
+            <span id="card_pump_3" class="efficiency-metric-val pump">0.00 %</span>
           </div>
         </div>
 
@@ -425,7 +435,7 @@
       </div>
     </section>
 
-    <!-- Section 4: Performance Characteristic Curves -->
+    <!-- Section 4: Performance Graphs and Comparison -->
     <section class="content-section no-print">
       <div class="section-header">
         <h2 class="section-title">4. Performance Characteristic Curves</h2>
@@ -444,7 +454,7 @@
       </div>
     </section>
 
-    <!-- Section 5: Calculation Details (Document-Style) -->
+    <!-- Section 5: Intermediate Calculation Steps (Document-Style) -->
     <section class="content-section">
       <div class="section-header">
         <h2 class="section-title">5. Step-by-Step Calculation Breakdown</h2>
@@ -464,11 +474,13 @@
 
   </main>
 
-  <!-- Site Footer -->
+  <!-- Clean Footer -->
   <footer class="site-footer">
     <div class="container footer-content">
-      <div>
-        <strong>Reciprocating Pump Performance Analyzer</strong> &copy; <span class="current-year"></span> | Engineering Laboratory Suite
+      <div class="footer-brand">
+        <span class="footer-brand-title">ReciproCalc</span>
+        <span class="footer-brand-sep">|</span>
+        <span class="footer-copy">Reciprocating Pump Performance Analyzer &copy; <span class="current-year"></span></span>
       </div>
       <ul class="footer-links">
         <li><a href="../index.html">Home</a></li>

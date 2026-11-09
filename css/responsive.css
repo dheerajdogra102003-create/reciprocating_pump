@@ -1,12 +1,13 @@
 /* ==========================================================================
-   Reciprocating Pump Performance Analyzer - Responsive Stylesheet
+   ReciproCalc – Reciprocating Pump Performance Analyzer
+   Responsive Stylesheet: Optimized for Mobile, Tablet, and Desktop
    ========================================================================== */
 
 /* Laptops & Tablets (max-width: 992px) */
 @media screen and (max-width: 992px) {
   .hero-layout {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
   }
 
   .hero-image-wrap {
@@ -15,6 +16,11 @@
 
   .hero-text-wrap {
     order: 1;
+    text-align: center;
+  }
+
+  .hero-cta-group {
+    justify-content: center !important;
   }
 
   .efficiency-summary-strip {
@@ -30,14 +36,14 @@
 /* Tablets & Mobile (max-width: 768px) */
 @media screen and (max-width: 768px) {
   :root {
-    --nav-height: 62px;
+    --nav-height: 64px;
   }
 
   .container {
-    padding: 0 16px;
+    padding: 0 18px;
   }
 
-  /* Navigation Bar */
+  /* Navigation Bar Drawer */
   .nav-toggle {
     display: inline-flex;
     align-items: center;
@@ -50,11 +56,12 @@
     top: var(--nav-height);
     left: 0;
     right: 0;
-    background-color: #FFFFFF;
+    background-color: var(--bg-white);
     flex-direction: column;
-    padding: 16px;
-    border-bottom: 1px solid var(--divider);
-    gap: 6px;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(38, 59, 80, 0.08);
+    gap: 8px;
     z-index: 999;
   }
 
@@ -69,11 +76,11 @@
 
   /* Sections */
   .content-section {
-    padding: 32px 0;
+    padding: 36px 0;
   }
 
   .section-title {
-    font-size: 21px;
+    font-size: 20px;
   }
 
   .hero-heading {
@@ -113,6 +120,10 @@
     flex-direction: column;
   }
 
+  .action-cluster .btn {
+    width: 100%;
+  }
+
   .constants-list-grid {
     grid-template-columns: 1fr;
   }
@@ -120,16 +131,37 @@
   .footer-content {
     flex-direction: column;
     text-align: center;
-    gap: 12px;
+    gap: 14px;
   }
 
   .footer-links {
     justify-content: center;
     flex-wrap: wrap;
+    gap: 16px;
   }
 
   .form-control-input {
     font-size: 13.5px;
-    padding: 6px 8px;
+    padding: 7px 10px;
+  }
+
+  .chart-tabs,
+  .calc-nav-tabs {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chart-tab-btn,
+  .calc-tab-btn {
+    width: 100%;
+    text-align: left;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+  }
+
+  .chart-tab-btn.active,
+  .calc-tab-btn.active {
+    border-bottom: none;
+    border-left-color: var(--terracotta);
   }
 }

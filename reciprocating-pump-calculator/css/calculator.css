@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Reciprocating Pump Performance Analyzer - Calculator Specific Styles
+   ReciproCalc – Reciprocating Pump Performance Analyzer
+   Calculator Specific Styles: Steel Blue + Terracotta Theme
    Flat, continuous engineering layout with minimal borders & document style
    ========================================================================== */
 
@@ -10,9 +11,9 @@
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
-  padding: 16px 0;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--divider);
+  padding: 18px 0;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .action-cluster {
@@ -22,14 +23,15 @@
   flex-wrap: wrap;
 }
 
-/* Constants Compact Data Table */
+/* Constants Compact Flat Grid */
 .constants-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px 24px;
-  padding: 18px 0;
-  border-top: 1px solid var(--divider);
-  border-bottom: 1px solid var(--divider);
+  gap: 16px 24px;
+  padding: 22px 20px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
 }
 
 .constant-data-point {
@@ -40,29 +42,30 @@
 .constant-prop {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 600;
 }
 
 .constant-val-line {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--dark-navy);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--deep-steel-blue);
   font-variant-numeric: tabular-nums;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 5px;
 }
 
 .constant-dim {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--muted-blue-grey);
   font-weight: 500;
 }
 
-/* Data-Entry Input Table */
+/* Data-Entry Observation Table */
 .data-entry-table {
   width: 100%;
   border-collapse: collapse;
@@ -72,22 +75,40 @@
   padding: 14px 12px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--dark-navy);
-  border-bottom: 2px solid var(--divider);
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
   text-align: left;
 }
 
 .data-entry-table td {
   padding: 12px 10px;
-  border-bottom: 1px solid var(--divider);
+  border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
+  background-color: var(--bg-white);
+}
+
+.data-entry-table tbody tr:hover td {
+  background-color: var(--bg-secondary);
 }
 
 .reading-tag {
   font-size: 13.5px;
   font-weight: 700;
-  color: var(--dark-navy);
+  color: var(--deep-steel-blue);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reading-tag::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--terracotta);
 }
 
 .form-input-wrap {
@@ -99,36 +120,38 @@
 .form-control-input {
   width: 100%;
   min-width: 100px;
-  padding: 8px 12px;
+  padding: 9px 12px;
   font-size: 14.5px;
   font-family: var(--font-sans);
-  color: var(--text-primary);
-  background-color: var(--input-bg);
-  border: 1px solid #CBD5E1;
+  color: var(--text-main);
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius);
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
   font-variant-numeric: tabular-nums;
 }
 
 .form-control-input:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px rgba(205, 121, 87, 0.18);
 }
 
 .form-control-input.is-invalid {
-  border-color: var(--danger-red);
-  background-color: var(--danger-red-bg);
+  border-color: var(--status-danger);
+  background-color: var(--status-danger-bg);
 }
 
 /* Efficiency Overview Metrics Strip - Flat Horizontal Style */
 .efficiency-summary-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  padding: 24px 0;
+  gap: 24px;
+  padding: 24px;
   margin-bottom: 32px;
-  border-bottom: 1px solid var(--divider);
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
 }
 
 .summary-reading-col {
@@ -137,80 +160,116 @@
 }
 
 .summary-col-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--dark-navy);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--deep-steel-blue);
   margin-bottom: 14px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--divider);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border-color);
   letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary-col-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--bg-secondary);
+  color: var(--steel-blue);
 }
 
 .efficiency-metric-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 6px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.efficiency-metric-row:last-child {
+  border-bottom: none;
 }
 
 .efficiency-metric-label {
   font-size: 13px;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .efficiency-metric-val {
   font-size: 18px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: var(--dark-navy);
+  color: var(--deep-steel-blue);
 }
 
+/* 30% Warm Terracotta for Primary Efficiency Metric */
 .efficiency-metric-val.primary {
-  color: var(--primary-blue);
+  color: var(--terracotta);
 }
 
-.efficiency-metric-val.success {
-  color: var(--success-green);
+/* Steel Blue tones for secondary efficiencies */
+.efficiency-metric-val.vol {
+  color: var(--deep-steel-blue);
 }
 
-/* Comparison Table Highlights */
+.efficiency-metric-val.pump {
+  color: var(--steel-blue);
+}
+
+/* Results Detailed Comparison Table */
 .results-table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .results-table th {
-  padding: 12px 14px;
+  padding: 13px 14px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--dark-navy);
-  border-bottom: 2px solid var(--divider);
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
   white-space: nowrap;
 }
 
 .results-table td {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--divider);
+  border-bottom: 1px solid var(--border-color);
   font-size: 14px;
+  color: var(--text-main);
+  background-color: var(--bg-white);
+}
+
+.results-table tbody tr:hover td {
+  background-color: var(--bg-secondary);
 }
 
 .results-table tr.highlight-metric td {
   font-weight: 700;
-  background-color: rgba(219, 234, 254, 0.35);
-  color: var(--dark-navy);
+  background-color: var(--muted-peach-subtle);
+  color: var(--deep-steel-blue);
+}
+
+.results-table tr.highlight-metric:first-of-type td {
+  border-top: 1px solid var(--muted-peach-border);
 }
 
 .results-table tr.highlight-metric td.eff-highlight {
-  color: var(--primary-blue);
+  color: var(--terracotta);
   font-size: 15px;
 }
 
-/* Calculation Details - Document / Report Style */
+/* Step-by-Step Calculation Breakdown */
 .calc-nav-tabs {
   display: flex;
-  gap: 12px;
-  border-bottom: 1px solid var(--divider);
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .calc-tab-btn {
@@ -223,68 +282,88 @@
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.15s ease-in-out;
+  font-family: inherit;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .calc-tab-btn:hover {
-  color: var(--dark-navy);
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
 }
 
 .calc-tab-btn.active {
-  color: var(--primary-blue);
-  border-bottom-color: var(--primary-blue);
+  color: var(--terracotta);
+  border-bottom: 2px solid var(--terracotta);
   font-weight: 700;
+  background-color: var(--bg-secondary);
 }
 
 .doc-calc-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px 36px;
+  gap: 20px 28px;
+  padding: 24px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
 }
 
 .doc-calc-step {
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--divider);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.doc-calc-step:nth-last-child(-n+2) {
+  border-bottom: none;
 }
 
 .doc-step-title {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
-  color: var(--dark-navy);
+  color: var(--deep-steel-blue);
   margin-bottom: 8px;
 }
 
 .doc-formula-box {
   font-family: var(--font-mono);
-  font-size: 13.5px;
-  color: var(--text-primary);
-  line-height: 1.6;
+  font-size: 13px;
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
   margin-bottom: 6px;
+  border-left: 3px solid var(--steel-blue);
 }
 
 .doc-sub-text {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-secondary);
   line-height: 1.5;
+  margin-bottom: 3px;
 }
 
 .doc-result-line {
   margin-top: 6px;
   font-size: 14px;
   font-weight: 700;
-  color: var(--primary-blue);
+  color: var(--terracotta);
 }
 
-/* Performance Curve Chart */
+/* Performance Characteristic Curves */
 .chart-wrapper {
-  margin-top: 18px;
-  padding: 16px 0;
+  margin-top: 14px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
 }
 
 .chart-tabs {
   display: flex;
   gap: 8px;
-  border-bottom: 1px solid var(--divider);
+  border-bottom: 1px solid var(--border-color);
   margin-bottom: 18px;
   flex-wrap: wrap;
 }
@@ -299,25 +378,26 @@
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.15s ease-in-out;
+  font-family: inherit;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .chart-tab-btn:hover {
-  color: var(--dark-navy);
+  color: var(--deep-steel-blue);
+  background-color: var(--bg-secondary);
 }
 
 .chart-tab-btn.active {
-  color: var(--primary-blue);
-  border-bottom-color: var(--primary-blue);
+  color: var(--terracotta);
+  border-bottom: 2px solid var(--terracotta);
   font-weight: 700;
+  background-color: var(--bg-secondary);
 }
 
 .chart-canvas-area {
   position: relative;
   width: 100%;
-  border: 1px solid var(--divider);
-  border-radius: var(--radius);
   background-color: #FFFFFF;
-  padding: 16px;
   overflow-x: auto;
 }
 
@@ -335,28 +415,31 @@
   }
 
   .print-title {
-    font-size: 18pt;
+    font-size: 16pt;
     font-weight: bold;
     margin-bottom: 4px;
+    color: #000000;
   }
 
   .print-subtitle {
     font-size: 11pt;
-    color: #444444;
+    color: #333333;
     margin-bottom: 12px;
   }
 
   .print-meta-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    font-size: 10pt;
+    gap: 10px;
+    font-size: 9.5pt;
   }
 
   .doc-calc-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 16px !important;
+    gap: 14px !important;
+    border: none !important;
+    padding: 0 !important;
     page-break-inside: avoid;
   }
 
@@ -364,6 +447,8 @@
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 12px !important;
+    border: 1px solid #CCCCCC !important;
+    padding: 12px !important;
     page-break-inside: avoid;
   }
 }

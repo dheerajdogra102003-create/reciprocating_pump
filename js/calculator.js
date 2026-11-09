@@ -505,7 +505,7 @@
     });
 
     if (points.length < 2) {
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#7895A8';
       ctx.font = '14px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('Enter readings in the table above to dynamically generate performance curves.', width / 2, height / 2);
@@ -536,33 +536,33 @@
       maxY = 100;
       yAxisTitle = 'Efficiency (%)';
       series = [
-        { name: 'Volumetric Efficiency (ηvol)', color: '#059669', key: 'volumetric' },
-        { name: 'Pump Efficiency (ηpump)', color: '#d97706', key: 'pump' },
-        { name: 'Overall Efficiency (ηoverall)', color: '#0284c7', key: 'overall' }
+        { name: 'Volumetric Efficiency (ηvol)', color: '#263B50', key: 'volumetric' },
+        { name: 'Pump Efficiency (ηpump)', color: '#426783', key: 'pump' },
+        { name: 'Overall Efficiency (ηoverall)', color: '#CD7957', key: 'overall' }
       ];
     } else if (state.activeChartTab === 'head_q') {
       var maxQ = Math.max.apply(null, points.map(function (p) { return Math.max(p.Qact, p.Qtheo); })) * 1.25;
       maxY = maxQ > 0 ? maxQ : 1.0;
       yAxisTitle = 'Discharge (L/s)';
       series = [
-        { name: 'Actual Discharge (Qact)', color: '#0284c7', key: 'Qact' },
-        { name: 'Theoretical Discharge (Qtheo)', color: '#94a3b8', key: 'Qtheo', dashed: true }
+        { name: 'Actual Discharge (Qact)', color: '#CD7957', key: 'Qact' },
+        { name: 'Theoretical Discharge (Qtheo)', color: '#426783', key: 'Qtheo', dashed: true }
       ];
     } else {
       var maxP = Math.max.apply(null, points.map(function (p) { return Math.max(p.Ei, p.Es, p.Eo); })) * 1.25;
       maxY = maxP > 0 ? maxP : 1.0;
       yAxisTitle = 'Power (kW)';
       series = [
-        { name: 'Input Electrical Power (Ei)', color: '#dc2626', key: 'Ei' },
-        { name: 'Shaft Brake Power (Es)', color: '#d97706', key: 'Es' },
-        { name: 'Pump Output Power (Eo)', color: '#059669', key: 'Eo' }
+        { name: 'Input Electrical Power (Ei)', color: '#263B50', key: 'Ei' },
+        { name: 'Shaft Brake Power (Es)', color: '#426783', key: 'Es' },
+        { name: 'Pump Output Power (Eo)', color: '#CD7957', key: 'Eo' }
       ];
     }
 
     // Gridlines and Y-ticks
-    ctx.strokeStyle = '#e2e8f0';
+    ctx.strokeStyle = '#D9E0E5';
     ctx.lineWidth = 1;
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#64748B';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
 
@@ -591,7 +591,7 @@
     }
 
     // Axes
-    ctx.strokeStyle = '#334155';
+    ctx.strokeStyle = '#263B50';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(padLeft, padTop);
@@ -600,7 +600,7 @@
     ctx.stroke();
 
     // Axis Labels
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = '#263B50';
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Total Operating Head H (metres of water)', padLeft + plotW / 2, height - 12);
@@ -673,7 +673,7 @@
       ctx.fillStyle = s.color;
       ctx.fill();
 
-      ctx.fillStyle = '#1e293b';
+      ctx.fillStyle = '#263B50';
       ctx.fillText(s.name, legendX + 24, legendY);
       legendX += ctx.measureText(s.name).width + 38;
     });
@@ -708,7 +708,7 @@
     report += 'Parameter                       | Reading 1   | Reading 2   | Reading 3   \n';
     report += '------------------------------------------------------------------------\n';
     report += 'Pump RPM (N)                    | ' + padRight(rawReadings[0].rpm, 11) + ' | ' + padRight(rawReadings[1].rpm, 11) + ' | ' + padRight(rawReadings[2].rpm, 11) + '\n';
-    report += 'Gauge Pressure (Pd) [kg/cm²]    | ' + padRight(rawReadings[0].pd, 11)  + ' | ' + padRight(rawReadings[0].pd, 11)  + ' | ' + padRight(rawReadings[2].pd, 11)  + '\n';
+    report += 'Gauge Pressure (Pd) [kg/cm²]    | ' + padRight(rawReadings[0].pd, 11)  + ' | ' + padRight(rawReadings[1].pd, 11)  + ' | ' + padRight(rawReadings[2].pd, 11)  + '\n';
     report += 'Vacuum Pressure (Ps) [mmHg]     | ' + padRight(rawReadings[0].ps, 11)  + ' | ' + padRight(rawReadings[1].ps, 11)  + ' | ' + padRight(rawReadings[2].ps, 11)  + '\n';
     report += 'Water Rise (R) [m]              | ' + padRight(rawReadings[0].r, 11)   + ' | ' + padRight(rawReadings[1].r, 11)   + ' | ' + padRight(rawReadings[2].r, 11)   + '\n';
     report += 'Water Rise Time (t) [s]         | ' + padRight(rawReadings[0].t, 11)   + ' | ' + padRight(rawReadings[1].t, 11)   + ' | ' + padRight(rawReadings[2].t, 11)   + '\n';
@@ -821,7 +821,7 @@
     runCalculation();
 
     // Attach live input listeners to all input fields
-    var inputs = document.querySelectorAll('.input-table input');
+    var inputs = document.querySelectorAll('.form-control-input, .data-entry-table input, .input-table input');
     inputs.forEach(function (input) {
       // Auto-select 0 on click/focus so user can type immediately
       input.addEventListener('focus', function () {
@@ -943,3 +943,4 @@
   }
 
 })(window);
+
