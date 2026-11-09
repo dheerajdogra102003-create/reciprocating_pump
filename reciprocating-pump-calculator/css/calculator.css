@@ -1,0 +1,369 @@
+/* ==========================================================================
+   Reciprocating Pump Performance Analyzer - Calculator Specific Styles
+   Flat, continuous engineering layout with minimal borders & document style
+   ========================================================================== */
+
+/* Calculator Action Bar */
+.calc-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.action-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Constants Compact Data Table */
+.constants-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+}
+
+.constant-data-point {
+  display: flex;
+  flex-direction: column;
+}
+
+.constant-prop {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.constant-val-line {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.constant-dim {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Data-Entry Input Table */
+.data-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-entry-table th {
+  padding: 14px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  border-bottom: 2px solid var(--divider);
+  text-align: left;
+}
+
+.data-entry-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: middle;
+}
+
+.reading-tag {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  white-space: nowrap;
+}
+
+.form-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-control-input {
+  width: 100%;
+  min-width: 100px;
+  padding: 8px 12px;
+  font-size: 14.5px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background-color: var(--input-bg);
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.form-control-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-control-input.is-invalid {
+  border-color: var(--danger-red);
+  background-color: var(--danger-red-bg);
+}
+
+/* Efficiency Overview Metrics Strip - Flat Horizontal Style */
+.efficiency-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding: 24px 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.summary-reading-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-col-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--divider);
+  letter-spacing: -0.01em;
+}
+
+.efficiency-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+}
+
+.efficiency-metric-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.efficiency-metric-val {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--dark-navy);
+}
+
+.efficiency-metric-val.primary {
+  color: var(--primary-blue);
+}
+
+.efficiency-metric-val.success {
+  color: var(--success-green);
+}
+
+/* Comparison Table Highlights */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th {
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  border-bottom: 2px solid var(--divider);
+  white-space: nowrap;
+}
+
+.results-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+
+.results-table tr.highlight-metric td {
+  font-weight: 700;
+  background-color: rgba(219, 234, 254, 0.35);
+  color: var(--dark-navy);
+}
+
+.results-table tr.highlight-metric td.eff-highlight {
+  color: var(--primary-blue);
+  font-size: 15px;
+}
+
+/* Calculation Details - Document / Report Style */
+.calc-nav-tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--divider);
+  margin-bottom: 24px;
+}
+
+.calc-tab-btn {
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease-in-out;
+}
+
+.calc-tab-btn:hover {
+  color: var(--dark-navy);
+}
+
+.calc-tab-btn.active {
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.doc-calc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 36px;
+}
+
+.doc-calc-step {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.doc-step-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--dark-navy);
+  margin-bottom: 8px;
+}
+
+.doc-formula-box {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.doc-sub-text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.doc-result-line {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+/* Performance Curve Chart */
+.chart-wrapper {
+  margin-top: 18px;
+  padding: 16px 0;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--divider);
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.chart-tab-btn {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease-in-out;
+}
+
+.chart-tab-btn:hover {
+  color: var(--dark-navy);
+}
+
+.chart-tab-btn.active {
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.chart-canvas-area {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius);
+  background-color: #FFFFFF;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+/* Printable Report */
+.print-only-header {
+  display: none;
+}
+
+@media print {
+  .print-only-header {
+    display: block !important;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #000000;
+  }
+
+  .print-title {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .print-subtitle {
+    font-size: 11pt;
+    color: #444444;
+    margin-bottom: 12px;
+  }
+
+  .print-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    font-size: 10pt;
+  }
+
+  .doc-calc-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    page-break-inside: avoid;
+  }
+
+  .efficiency-summary-strip {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+}

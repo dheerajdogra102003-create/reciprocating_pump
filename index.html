@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reciprocating Pump Performance Analyzer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo" aria-label="Home">
+        <div class="brand-mark">RP</div>
+        <div class="brand-text-block">
+          <span class="brand-name">ReciproCalc</span>
+          <span class="brand-sub">Fluid Machinery Laboratory</span>
+        </div>
+      </a>
+
+      <button class="nav-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+        ☰
+      </button>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="pages/calculator.html" class="nav-link">Calculator</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section (Side-by-Side Text & Image, Flat Layout) -->
+  <section class="content-section" style="padding-top: 56px; padding-bottom: 56px;">
+    <div class="container">
+      <div class="hero-layout" style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center;">
+        
+        <!-- Hero Text -->
+        <div class="hero-text-wrap">
+          <h1 class="hero-heading" style="font-size: 38px; font-weight: 800; color: var(--dark-navy); line-height: 1.2; letter-spacing: -0.025em; margin-bottom: 16px;">
+            Reciprocating Pump Performance Analyzer
+          </h1>
+          <p style="font-size: 16.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px;">
+            A modern engineering platform for fluid mechanics practicals. Automate experimental calculations, examine intermediate power and discharge variables, evaluate efficiencies, and inspect step-by-step mathematical working.
+          </p>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="pages/calculator.html" class="btn btn-primary">Start Calculation &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Hero 3D Technical Image (Flat side-by-side, no card wrapper) -->
+        <div class="hero-image-wrap" style="text-align: center;">
+          <img 
+            src="assets/images/reciprocating-pump.png" 
+            alt="3D isometric CAD render of reciprocating pump laboratory test rig"
+            style="width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--divider); display: block;"
+          >
+          <span style="display: block; font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+            3D CAD Visualization of Double-Acting Reciprocating Pump Rig
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Features (Simple horizontal content columns, no cards) -->
+  <main class="content-section">
+    <div class="container">
+      
+      <div class="section-header">
+        <h2 class="section-title">Laboratory Features & Capabilities</h2>
+        <p class="section-subtitle">Core functionality designed for mechanical engineering practicals and analysis.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 36px 48px;">
+        
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Predefined Apparatus Calibration</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Cylinder bore, stroke length, collecting tank area, and electrical constants are built directly into the system to minimize manual data entry.
+          </p>
+        </div>
+
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Instant Hydro-Mechanical Reduction</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Calculates electrical input power, shaft power, theoretical and actual discharges, total head, and pump hydraulic output in real time.
+          </p>
+        </div>
+
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Multi-Efficiency Determination</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Evaluates Overall, Volumetric, and Pump efficiencies across three test runs with side-by-side comparative analysis.
+          </p>
+        </div>
+
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Interactive Performance Curves</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Native canvas plotting for Total Head vs. Efficiencies, Head vs. Discharge, and Head vs. Power curves.
+          </p>
+        </div>
+
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Document-Style Step Breakdown</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Examine numerical substitutions, intermediate simplifications, and SI unit derivations for academic lab records.
+          </p>
+        </div>
+
+        <div style="border-top: 2px solid var(--primary-blue); padding-top: 16px;">
+          <h3 style="font-size: 17px; margin-bottom: 8px; color: var(--dark-navy);">Report & CSV Export</h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            Download formatted laboratory text reports or Excel-compatible CSV files, plus clean print-optimized views.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Reciprocating Pump Performance Analyzer</strong> &copy; <span class="current-year"></span> | Engineering Laboratory Suite
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="pages/calculator.html">Calculator</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Reciprocating Pump Performance Analyzer - Responsive Stylesheet
+   ========================================================================== */
+
+/* Laptops & Tablets (max-width: 992px) */
+@media screen and (max-width: 992px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .hero-image-wrap {
+    order: 2;
+  }
+
+  .hero-text-wrap {
+    order: 1;
+  }
+
+  .efficiency-summary-strip {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .doc-calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablets & Mobile (max-width: 768px) */
+@media screen and (max-width: 768px) {
+  :root {
+    --nav-height: 62px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  /* Navigation Bar */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-list {
+    display: none;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background-color: #FFFFFF;
+    flex-direction: column;
+    padding: 16px;
+    border-bottom: 1px solid var(--divider);
+    gap: 6px;
+    z-index: 999;
+  }
+
+  .nav-list.nav-open {
+    display: flex;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+  }
+
+  /* Sections */
+  .content-section {
+    padding: 32px 0;
+  }
+
+  .section-title {
+    font-size: 21px;
+  }
+
+  .hero-heading {
+    font-size: 28px !important;
+  }
+
+  .calc-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-cluster {
+    width: 100%;
+  }
+
+  .action-cluster .btn {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .constants-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile Devices (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  .hero-heading {
+    font-size: 24px !important;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .action-cluster {
+    flex-direction: column;
+  }
+
+  .constants-list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .form-control-input {
+    font-size: 13.5px;
+    padding: 6px 8px;
+  }
+}
